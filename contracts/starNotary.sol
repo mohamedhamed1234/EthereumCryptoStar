@@ -36,18 +36,22 @@ function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
 function buyStar(uint256 _tokenId) public payable {
     require(starsForSale[_tokenId] > 0);
 
-    uint256 starCost = starsForSale[_tokenId];
-    address starOwner = this.ownerOf(_tokenId);
-    require(msg.value >= starCost);
+        uint256 starCost = starsForSale[_tokenId];
+        address starOwner1 = ownerOf(_tokenId);
+        uint160 starOwner2 = uint160(starOwner1);
+        address payable starOwner = address(starOwner2);
+        require(msg.value >= starCost);
 
-    _removeTokenFrom(starOwner, _tokenId);
-    _addTokenTo(msg.sender, _tokenId);
+       // _removeTokenFrom(starOwner, _tokenId);
+       // _addTokenTo(msg.sender, _tokenId);
+        safeTransferFrom(starOwner, msg.sender, _tokenId);
 
-    starOwner.transfer(starCost);
+        starOwner.transfer(starCost);
 
-    if(msg.value > starCost) {
-        msg.sender.transfer(msg.value - starCost);
-    }
+        if(msg.value > starCost) {
+            msg.sender.transfer(msg.value - starCost);
+        }
+        starsForSale[_tokenId] = 0;
   }
 
   function lookUptokenIdToStarInfo(uint256 _tokenId) public view returns(string) {
