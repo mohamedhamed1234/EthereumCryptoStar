@@ -77,7 +77,8 @@ contract('StarNotary', async (accs) => {
     let tokenId2 = 20
     await instance.createStar('Star1','a','b','c','Hello World', tokenId1, {from: user1})
     await instance.createStar('Star2','a','b','c','Hi World', tokenId2,{from: user2})
-    await instance.exchangeStars(tokenId1,tokenId2);
+    await instance.approve(user1,tokenId2,{from:user2});
+    await instance.exchangeStars(tokenId1,tokenId2, {from:user1});
     let user1star = await instance.ownerOf(tokenId2);
     let user2star = await instance.ownerOf(tokenId1);
     assert.equal(user1star, user1);
