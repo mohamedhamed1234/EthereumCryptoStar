@@ -56,15 +56,24 @@ function buyStar(uint256 _tokenId) public payable {
         return Starname;
     }
 
-  function exchangeStars(uint256 _tokenId, uint256 _tokenId1) {
-            address owner = ownerOf(_tokenId);
-            address owner1 = ownerOf(_tokenId1);
+  function exchangeStars(uint256 _tokenId1, uint256 _tokenId2) {
+            //address owner = ownerOf(_tokenId);
+            //address owner1 = ownerOf(_tokenId1);
 
-            _removeTokenFrom(owner, _tokenId);
-            _removeTokenFrom(owner1, _tokenId1);
+            //_removeTokenFrom(owner, _tokenId);
+           // _removeTokenFrom(owner1, _tokenId1);
 
-            _addTokenTo(owner,_tokenId1);
-            _addTokenTo(owner1, _tokenId);
+           // _addTokenTo(owner,_tokenId1);
+           // _addTokenTo(owner1, _tokenId);
+		   
+		address starOwner1 = this.ownerOf(_tokenId1);
+        address starOwner2 = this.ownerOf(_tokenId2);
+        address approvedAddressStar2 = getApproved(_tokenId2);
+        require(msg.sender == starOwner1, "the sender needs to be the owner of the star 1");
+        require(msg.sender == approvedAddressStar2, "the sender needs to be approved for the star 2");
+
+        safeTransferFrom(starOwner1, starOwner2, _tokenId1);
+        safeTransferFrom(starOwner2, starOwner1, _tokenId2);
 
         }
         function transferStar(address addressReceiver, uint256 _tokenId){
